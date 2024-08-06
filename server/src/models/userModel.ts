@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { throwError } from "../helpers/throwError";
 
 const userSchema = new Schema({
   username: {
@@ -15,14 +14,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  friends: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  friendRequestsSent: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  friendRequestsReceived: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 export const User = mongoose.model("User", userSchema);
