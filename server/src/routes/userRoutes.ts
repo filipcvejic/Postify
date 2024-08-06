@@ -1,7 +1,13 @@
 import { Router } from "express";
-import { login, register } from "../controllers/userController.js";
+import {
+  acceptFriendRequest,
+  login,
+  register,
+  sendFriendRequest,
+} from "../controllers/userController.js";
 import { body } from "express-validator";
 import validateRequest from "../middlewares/validateRequest.js";
+import { acceptFriend } from "../models/friendModel.js";
 
 const router = Router();
 
@@ -48,5 +54,8 @@ router.post(
   validateRequest,
   login
 );
+
+router.post("/accept-request/:friendId", acceptFriendRequest);
+router.post("/send-request/:friendId", sendFriendRequest);
 
 export default router;
