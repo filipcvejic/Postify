@@ -1,11 +1,11 @@
-import { connectDB } from "./config/db.js";
+import { connectDB } from "./config/db";
 import express from "express";
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import router from "./routes/userRoutes.js";
-import { errorHandler } from "./middlewares/errorHandler.js";
+import userRoutes from "./routes/userRoutes";
+import authRoutes from "./routes/authRoutes";
+import { errorHandler } from "./middleware/errorHandler";
 
 const port = process.env.PORT || 5000;
 
@@ -25,7 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("uploads"));
 
-app.use("/", router);
+app.use("/", userRoutes);
+app.use("/auth", authRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
