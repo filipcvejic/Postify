@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { Request, RequestHandler } from "express";
 import { getUserById } from "../models/userModel";
 import { throwError } from "../helpers/throwError";
 import {
