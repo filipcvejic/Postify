@@ -13,7 +13,7 @@ export const verifyJWT: RequestHandler = (req, res, next) => {
 
   jwt.verify(
     token,
-    process.env.REFRESH_TOKEN_SECRET!,
+    process.env.ACCESS_TOKEN_SECRET,
     async (err: Error | null, decoded: string | JwtPayload | undefined) => {
       if (err) return throwError("Forbidden", 403);
 
