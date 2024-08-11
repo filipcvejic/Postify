@@ -30,6 +30,7 @@ export const login: RequestHandler = async (req, res, next) => {
     const accessToken = jwt.sign(
       {
         UserInfo: {
+          _id: foundUser._id,
           username: foundUser.username,
           email: foundUser.email,
         },
@@ -68,27 +69,31 @@ export const refresh: RequestHandler = (req, res, next) => {
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
     async (err: Error | null, decoded: string | JwtPayload | undefined) => {
-      if (err) return throwError("Forbidden", 403);
+      try {
+        if (err) return throwError("Forbidden", 403);
 
-      if (decoded && typeof decoded !== "string") {
-        const foundUser = await getUserByEmail(decoded.email);
+        if (decoded && typeof decoded !== "string") {
+          const foundUser = await getUserByEmail(decoded.email);
 
-        if (!foundUser) return throwError("Unauthorized", 401);
+          if (!foundUser) return throwError("Unauthorized", 401);
 
-        const accesToken = jwt.sign(
-          {
-            UserInfo: {
-              username: foundUser.username,
-              email: foundUser.email,
+          const accesToken = jwt.sign(
+            {
+              UserInfo: {
+                username: foundUser.username,
+                email: foundUser.email,
+              },
             },
-          },
-          process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "1m" }
-        );
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: "1m" }
+          );
 
-        res.json({ accesToken });
-      } else {
-        return throwError("Invalid token", 400);
+          res.json({ accesToken });
+        } else {
+          return throwError("Invalid token", 400);
+        }
+      } catch (err) {
+        next(err);
       }
     }
   );
