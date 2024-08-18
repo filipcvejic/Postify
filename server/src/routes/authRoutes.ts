@@ -1,4 +1,4 @@
-import express from "express";
+import { Router } from "express";
 import {
   login,
   logout,
@@ -8,7 +8,7 @@ import {
 import validateRequest from "../middleware/validateRequest";
 import { body } from "express-validator";
 
-const router = express.Router();
+const router = Router();
 
 router.post(
   "/",
@@ -27,7 +27,6 @@ router.post(
       "Password must be between 6 and 32 characters, and include at least one uppercase letter, one lowercase letter, and one number."
     ),
   validateRequest,
-
   login
 );
 router.get("/refresh", refresh);

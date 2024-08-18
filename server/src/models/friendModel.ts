@@ -29,8 +29,6 @@ export const isAlreadyFriend = (user1: string, user2: string) =>
     ],
   });
 export const createUserFriend = async (user1: string, user2: string) => {
-  console.log(await isAlreadyFriend(user1, user2));
-
   if (!(await isAlreadyFriend(user1, user2))) {
     await new UserFriend({ user1, user2, status: Status.Pending }).save();
   }
