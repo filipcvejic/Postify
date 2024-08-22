@@ -18,9 +18,9 @@ const userSchema = new Schema({
 
 export const User = mongoose.model("User", userSchema);
 
-export const getUsers = () => User.find();
-export const getUserByEmail = (email: string) => User.findOne({ email });
-export const getUserById = (id: string) => User.findById(id);
+export const getUsers = () => User.find().lean();
+export const getUserByEmail = (email: string) => User.findOne({ email }).lean();
+export const getUserById = (id: string) => User.findById(id).lean();
 export const createUser = (values: Record<string, any>) =>
   new User(values).save().then((user) => user.toObject());
 export const deleteUserById = (id: string) => User.findByIdAndDelete(id);

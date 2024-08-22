@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorHandler";
 import userRoutes from "./routes/userRoutes";
 import authRoutes from "./routes/authRoutes";
+import postRoutes from "./routes/postRoutes";
 
 const port = process.env.PORT || 5000;
 
@@ -27,6 +28,7 @@ app.use(express.static("uploads"));
 
 app.use("/auth", authRoutes);
 app.use("/", userRoutes);
+app.use("/", postRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
