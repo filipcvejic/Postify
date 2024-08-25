@@ -1,12 +1,37 @@
-import { RequestHandler, Request, Response, NextFunction } from "express";
-import { getPosts } from "../models/postModel";
+import { RequestHandler } from "express";
+import { getPosts, createPost, editPostById } from "../models/postModel";
 import { throwError } from "../helpers/throwError";
-import {
-  Comment,
-  createComment,
-  editCommentById,
-} from "../models/commentModel";
-import { IComment } from "../interfaces/IComment";
+import { Comment } from "../models/commentModel";
+
+export const addPost: RequestHandler = async (req, res, next) => {
+  const userId = req.user._id;
+  const { title, description, image } = req.body;
+
+  if (!title || !description || !image)
+    return throwError("All fields are required", 400);
+
+  const newPost = await createPost({ userId, title, description, image });
+
+  res.status(200).json(newPost);
+};
+
+export const editPost: RequestHandler = async (req, res, next) => {
+  const userId = req.user._id;
+  const { postId } = req.params;
+  const { title, description, image } = req.body;
+
+  if (!title || !description || !image)
+    return throwError("All fields are required", 400);
+
+  const editedPost = await editPostById(postId, {
+    userId,
+    title,
+    description,
+    image,
+  });
+
+  res.status(200).json({ message: "Post has edited successfully", editedPost });
+};
 
 export const getPostsWithTwoLevelOfComments: RequestHandler = async (
   req,
@@ -50,43 +75,6 @@ export const getPostsWithTwoLevelOfComments: RequestHandler = async (
     });
 
     res.status(200).json(postsWithComments);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const addComment = async (
-  req: Request<{}, {}, IComment>,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { postId, parentId, userId, text } = req.body;
-
-    if (!postId || !userId || !text) {
-      return throwError("Post ID, User ID and Text are required.", 400);
-    }
-
-    const newComment = await createComment({ postId, parentId, userId, text });
-
-    res.status(200).json(newComment);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const editComment = async (
-  req: Request<{ commentId: string }, {}, IComment>,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { commentId } = req.params;
-    const updateValues = req.body;
-
-    const updatedComment = await editCommentById(commentId, updateValues);
-
-    res.status(200).json(updatedComment);
   } catch (err) {
     next(err);
   }
