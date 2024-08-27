@@ -4,8 +4,11 @@ import {
   editPost,
   getPostsWithTwoLevelOfComments,
 } from "../controllers/postController";
+import { verifyJWT } from "../middleware/verifyJWT";
 
 const router = Router();
+
+router.use(verifyJWT);
 
 router.get("/posts", getPostsWithTwoLevelOfComments);
 router.post("/add-post", addPost);
