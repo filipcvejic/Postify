@@ -36,23 +36,19 @@ export const login: RequestHandler = async (req, res, next) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1m" }
+      { expiresIn: "1d" }
     );
 
-    const refreshToken = jwt.sign(
-      { username: foundUser.username, email: foundUser.email },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" }
-    );
+    console.log(accessToken);
 
-    res.cookie("jwt", refreshToken, {
+    res.cookie("jwt", accessToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ accessToken });
+    res.status(200).json({ user: foundUser });
   } catch (err) {
     next(err);
   }

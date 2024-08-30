@@ -14,10 +14,13 @@ connectDB();
 
 const app = express();
 
+console.log(process.env.CLIENT_API_BASE_URL);
+
 const corsOptions = {
   origin: process.env.CLIENT_API_BASE_URL,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
