@@ -1,11 +1,14 @@
 import axios from "axios";
+import { cookies } from "next/headers";
 import { toast } from "react-toastify";
 import { getCookie } from "react-use-cookie";
+
+console.log(getCookie("jwt"));
 
 export const postifyApi = axios.create({
   baseURL: "http://localhost:5000",
   headers: {
-    Authorization: `Bearer ${getCookie("jwt")}`,
+    Authorization: `Bearer ${cookies().get("jwt")}`,
   },
 });
 
