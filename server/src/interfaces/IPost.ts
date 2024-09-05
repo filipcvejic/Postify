@@ -1,8 +1,6 @@
-import mongoose from "mongoose";
-
 export interface IPost {
-  userId: mongoose.Types.ObjectId;
-  title: String;
+  userId: String;
   description?: String;
   image?: string;
+  likes?: string[];
 }
