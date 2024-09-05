@@ -1,18 +1,13 @@
 import axios from "axios";
-import { cookies } from "next/headers";
 import { toast } from "react-toastify";
-import { getCookie } from "react-use-cookie";
-
-console.log(getCookie("jwt"));
 
 export const postifyApi = axios.create({
   baseURL: "http://localhost:5000",
-  headers: {
-    Authorization: `Bearer ${cookies().get("jwt")}`,
-  },
+  withCredentials: true,
 });
 
 export const handleApiError = (error: any) => {
+  console.log(error.response.data.message);
   switch (error.response.status) {
     case 400:
       if (!error.response.data) {
@@ -27,7 +22,7 @@ export const handleApiError = (error: any) => {
         return;
       }
 
-      toast.error(error.response.data);
+      toast.error(error.response.data.message);
       return;
     case 401:
       toast.error("Niste autentikovani");
