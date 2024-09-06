@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IComment } from "../interfaces/IComment";
 
-const commentSchema: Schema<IComment> = new Schema({
+const commentSchema = new Schema({
   postId: {
     type: Schema.Types.ObjectId,
     ref: "Post",
@@ -20,21 +20,21 @@ const commentSchema: Schema<IComment> = new Schema({
   text: {
     type: String,
   },
+  likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
   createdAt: {
     type: Date,
     default: Date.now(),
   },
 });
 
-export const Comment = mongoose.model<IComment>("Comment", commentSchema);
+export const Comment = mongoose.model("Comment", commentSchema);
 
-export const getComments = () => Comment.find().lean();
-export const getCommentById = (id: string) => Comment.findById(id).lean();
+export const getComments = () => Comment.find().select("-__v").lean();
+export const getCommentById = (id: string) =>
+  Comment.findById(id).select("-__v");
 export const createComment = async (values: IComment): Promise<IComment> => {
   const comment = new Comment(values);
-  return await comment
-    .save()
-    .then((savedComment) => savedComment.toObject() as IComment);
+  return await comment.save().then((savedComment) => savedComment.toObject());
 };
 export const editCommentById = (id: string, values: IComment) =>
   Comment.findByIdAndUpdate(id, values);

@@ -20,7 +20,9 @@ const userFriendSchema = new Schema({
 export const UserFriend = mongoose.model("UserFriend", userFriendSchema);
 
 export const getUserFriends = (userId: string) =>
-  UserFriend.find({ $or: [{ user1: userId }, { user2: userId }] });
+  UserFriend.find({ $or: [{ user1: userId }, { user2: userId }] })
+    .select("-__v")
+    .lean();
 export const isAlreadyFriend = (user1: string, user2: string) =>
   UserFriend.findOne({
     $or: [
