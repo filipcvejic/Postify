@@ -7,6 +7,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import userRoutes from "./routes/userRoutes";
 import authRoutes from "./routes/authRoutes";
 import postRoutes from "./routes/postRoutes";
+import commentRoutes from "./routes/commentRoutes";
 
 const port = process.env.PORT || 5000;
 
@@ -20,7 +21,6 @@ const corsOptions = {
   origin: process.env.CLIENT_API_BASE_URL,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
@@ -32,6 +32,7 @@ app.use(express.static("uploads"));
 app.use("/auth", authRoutes);
 app.use("/", userRoutes);
 app.use("/", postRoutes);
+app.use("/", commentRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
