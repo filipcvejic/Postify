@@ -1,44 +1,57 @@
-import { RequestHandler } from "express";
-import { getPosts, createPost, editPostById } from "../models/postModel";
+import {
+  getPosts,
+  createPost,
+  editPostById,
+  Post,
+  getPostById,
+} from "../models/postModel";
 import { throwError } from "../helpers/throwError";
 import { Comment } from "../models/commentModel";
+import asyncHandler from "express-async-handler";
+import { getUserById } from "../models/userModel";
+import { Types } from "mongoose";
 
-export const addPost: RequestHandler = async (req, res, next) => {
-  const userId = req.user._id;
-  const { title, description, image } = req.body;
+export const addPost = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+  const image = req.file as Express.MulterS3File;
+  const { description } = req.body;
 
-  if (!title || !description || !image)
-    return throwError("All fields are required", 400);
+  if (!user) return throwError("User not authenticated", 401);
 
-  const newPost = await createPost({ userId, title, description, image });
+  if (!description && !image)
+    return throwError("At least one field must be filled", 400);
+
+  const newPost = await createPost({
+    userId: user._id,
+    description,
+    image: image?.location,
+  });
 
   res.status(200).json(newPost);
-};
+});
 
-export const editPost: RequestHandler = async (req, res, next) => {
-  const userId = req.user._id;
+export const editPost = asyncHandler(async (req, res, next) => {
+  const user = req.user;
   const { postId } = req.params;
-  const { title, description, image } = req.body;
+  const image = req.file as Express.MulterS3File;
+  const { title, description } = req.body;
 
-  if (!title || !description || !image)
-    return throwError("All fields are required", 400);
+  if (!user) return throwError("User not authenticated", 401);
+
+  if (!title && !description && !image)
+    return throwError("At least one field must be filled", 400);
 
   const editedPost = await editPostById(postId, {
-    userId,
-    title,
-    description,
-    image,
+    userId: user._id,
+    description: description ?? null,
+    image: image?.location,
   });
 
   res.status(200).json({ message: "Post has edited successfully", editedPost });
-};
+});
 
-export const getPostsWithTwoLevelOfComments: RequestHandler = async (
-  req,
-  res,
-  next
-) => {
-  try {
+export const getPostsWithTwoLevelOfComments = asyncHandler(
+  async (req, res, next) => {
     const posts = await getPosts();
 
     if (!posts) return throwError("No posts found", 404);
@@ -48,15 +61,17 @@ export const getPostsWithTwoLevelOfComments: RequestHandler = async (
       parentId: null,
     }).lean();
 
-    if (!firstLevelComments.length)
-      return throwError("No first-level comments found", 404);
+    console.log(firstLevelComments);
+
+    // if (!firstLevelComments.length)
+    //   return throwError("No first-level comments found", 404);
 
     const secondLevelComments = await Comment.find({
       parentId: { $in: firstLevelComments.map((comment) => comment._id) },
     }).lean();
 
-    if (!secondLevelComments.length)
-      return throwError("No second-level comments found", 404);
+    // if (!secondLevelComments.length)
+    //   return throwError("No second-level comments found", 404);
 
     const postsWithComments = posts.map((post) => {
       const comments = firstLevelComments
@@ -75,7 +90,39 @@ export const getPostsWithTwoLevelOfComments: RequestHandler = async (
     });
 
     res.status(200).json(postsWithComments);
-  } catch (err) {
-    next(err);
   }
-};
+);
+
+export const likePost = asyncHandler(async (req, res, next) => {
+  const { postId } = req.params;
+  const { user } = req;
+
+  if (!user) return throwError("User not authenticated", 401);
+
+  const post = await getPostById(postId);
+
+  if (!post) return throwError("Post not found", 404);
+
+  const userId = new Types.ObjectId(user._id);
+
+  if (!post.likes.includes(userId)) {
+    post.likes.push(userId);
+  }
+
+  await post.save();
+});
+
+export const unlikePost = asyncHandler(async (req, res, next) => {
+  const { postId } = req.params;
+  const { user } = req;
+
+  if (!user) return throwError("User not authenticated", 401);
+
+  const post = await Post.findById(postId);
+
+  if (!post) return throwError("Post not found", 404);
+
+  post.likes = post.likes?.filter((like) => like.toString() !== user._id);
+
+  await post.save();
+});
