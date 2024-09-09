@@ -8,7 +8,6 @@ import {
 import { throwError } from "../helpers/throwError";
 import { Comment } from "../models/commentModel";
 import asyncHandler from "express-async-handler";
-import { getUserById } from "../models/userModel";
 import { Types } from "mongoose";
 
 export const addPost = asyncHandler(async (req, res, next) => {
