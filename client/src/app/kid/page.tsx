@@ -240,3 +240,71 @@ function KidPage() {
 }
 
 export default KidPage;
+
+{
+  /* <Grid2
+            key={post._id}
+            container
+            flexDirection={`column`}
+            bgcolor="white"
+            borderRadius={3}
+          >
+            <Grid2
+              container
+              justifyContent="space-between"
+              alignItems="center"
+              m={2}
+            >
+              <Grid2>
+                <Grid2 container alignItems="center" spacing={2}>
+                  <Typography>Slika</Typography>
+                  <Stack>
+                    <Typography>Filip Cvejic</Typography>
+                    <Typography>5m ago</Typography>
+                  </Stack>
+                </Grid2>
+              </Grid2>
+              <Grid2>
+                <IconButton sx={{ p: 0 }}>
+                  <MoreHoriz />
+                </IconButton>
+              </Grid2>
+            </Grid2>
+
+            {post.image && (
+              <Grid2 container position={`relative`}>
+                <Image
+                  src={post.image}
+                  alt="post image"
+                  fill
+                  // width={700}
+                  // height={400}
+                  objectFit="contain"
+                  objectPosition="center"
+                />
+              </Grid2>
+            )}
+
+            <Grid2
+              container
+              justifyContent="space-between"
+              alignItems="center"
+              px={2}
+              pb={2}
+            >
+              <Grid2>
+                <IconButton onClick={() => handleLikePost(post._id)}>
+                  <FavoriteBorderOutlined />
+                </IconButton>
+                <IconButton>
+                  <SmsOutlined />
+                </IconButton>
+              </Grid2>
+              <Grid2>
+                <IconButton>
+                  <BookmarkBorder />
+                </IconButton>
+              </Grid2>
+            </Grid2>
+          </Grid2> */
+}
