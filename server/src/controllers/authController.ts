@@ -35,8 +35,6 @@ export const login = asyncHandler(async (req, res, next) => {
     { expiresIn: "1d" }
   );
 
-  console.log(accessToken);
-
   res.cookie("jwt", accessToken, {
     httpOnly: false,
     secure: false,
