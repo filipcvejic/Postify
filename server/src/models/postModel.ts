@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { IPost } from "../interfaces/IPost";
 
 const postSchema = new Schema({
-  userId: {
+  user: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: "User",
@@ -14,7 +14,14 @@ const postSchema = new Schema({
 
 export const Post = mongoose.model("Post", postSchema);
 
-export const getPosts = () => Post.find().select("-__v").lean();
+export const getPosts = () =>
+  Post.find()
+    .select("-__v")
+    .populate({
+      path: "user",
+      select: "username",
+    })
+    .lean();
 export const createPost = (values: IPost) =>
   new Post(values).save().then((post) => post.toObject());
 export const getPostById = (id: string) => Post.findById(id).select("-__v");
