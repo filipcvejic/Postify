@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IPost } from "../interfaces/IPost";
 
-const postSchema = new Schema({
+const PostSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -12,7 +12,7 @@ const postSchema = new Schema({
   likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
 });
 
-export const Post = mongoose.model("Post", postSchema);
+export const Post = mongoose.model("Post", PostSchema);
 
 export const getPosts = () =>
   Post.find()

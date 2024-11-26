@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IUser } from "../interfaces/IUser";
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -17,7 +17,7 @@ const userSchema = new Schema({
   },
 });
 
-export const User = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", UserSchema);
 
 export const getUsers = () => User.find().select("-__v").lean();
 export const getUserByEmail = (email: string) =>

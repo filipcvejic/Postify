@@ -5,7 +5,7 @@ enum Status {
   Accepted,
 }
 
-const userFriendSchema = new Schema({
+const UserFriendSchema = new Schema({
   user1: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -27,7 +27,7 @@ const userFriendSchema = new Schema({
   },
 });
 
-export const UserFriend = mongoose.model("UserFriend", userFriendSchema);
+export const UserFriend = mongoose.model("UserFriend", UserFriendSchema);
 
 export const getUserFriends = async (userId: string) =>
   UserFriend.find({

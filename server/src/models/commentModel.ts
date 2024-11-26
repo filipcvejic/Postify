@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IComment } from "../interfaces/IComment";
 
-const commentSchema = new Schema({
+const CommentSchema = new Schema({
   postId: {
     type: Schema.Types.ObjectId,
     ref: "Post",
@@ -27,7 +27,7 @@ const commentSchema = new Schema({
   },
 });
 
-export const Comment = mongoose.model("Comment", commentSchema);
+export const Comment = mongoose.model("Comment", CommentSchema);
 
 export const getComments = () => Comment.find().select("-__v").lean();
 export const getCommentById = (id: string) =>
