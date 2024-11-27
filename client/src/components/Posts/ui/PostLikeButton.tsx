@@ -1,9 +1,9 @@
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { Grid2, Typography } from "@mui/material";
 import { useState } from "react";
 import { handleApiError, postifyApi } from "@/api/postifyApi";
+import PostBottomActionsIconButton from "./PostBottomActionsIconButton";
 
-function LikeButton({ postId, liked, likesCount }) {
+function PostLikeButton({ postId, liked, likesCount }) {
   const [isLiked, setIsLiked] = useState(liked);
 
   const handleLikePost = (postId: string) => {
@@ -13,11 +13,13 @@ function LikeButton({ postId, liked, likesCount }) {
   };
 
   return (
-    <Grid2 container onClick={() => handleLikePost(postId)}>
-      {isLiked ? <Favorite /> : <FavoriteBorder />}
-      <Typography>{likesCount}</Typography>
-    </Grid2>
+    <PostBottomActionsIconButton
+      postId={postId}
+      icon={isLiked ? <Favorite /> : <FavoriteBorder />}
+      counts={likesCount}
+      onClick={handleLikePost}
+    />
   );
 }
 
-export default LikeButton;
+export default PostLikeButton;
