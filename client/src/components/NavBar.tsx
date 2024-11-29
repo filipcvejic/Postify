@@ -80,9 +80,8 @@ function NavBar() {
         alignItems={`center`}
         bgcolor={`white`}
         borderRadius={3}
-        pt={1}
       >
-        <MenuList sx={{ width: `100%` }}>
+        <MenuList sx={{ width: `100%`, p: 0, height: "100%" }}>
           {navigations.map((navigation, i) => {
             const isActive = router.pathname === navigation.link;
 
@@ -92,16 +91,26 @@ function NavBar() {
                 sx={{
                   borderLeft: isActive ? "4px solid #9c27b0" : "none",
                   paddingInline: 5,
+                  paddingBlock: 3,
                   backgroundColor: isActive ? "#EAE8E9" : "inherit",
+                  ":hover": {
+                    bgcolor: "#EAE8E9",
+                  },
+                  gap: 2,
                 }}
               >
                 <ListItemIcon>
                   <navigation.icon
+                    sx={{ fontSize: 32 }}
                     style={{ fill: isActive ? `#9c27b0` : "" }}
                   />
                 </ListItemIcon>
                 <Link href={navigation.link}>
-                  <Typography color={isActive ? `#9c27b0` : ""}>
+                  <Typography
+                    color={isActive ? `#9c27b0` : ""}
+                    fontSize={18}
+                    fontWeight={`600`}
+                  >
                     {navigation.title}
                   </Typography>
                 </Link>
