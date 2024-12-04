@@ -9,5 +9,5 @@ export interface IPostDto {
   description?: string;
   image?: string;
   likes: string[];
-  comments: ICommentDto[];
+  comments?: ICommentDto[];
 }
